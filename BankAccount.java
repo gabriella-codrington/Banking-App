@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class BankAccount extends BankingApp{
 	static float balance;
@@ -13,7 +14,6 @@ public class BankAccount extends BankingApp{
 		accountNumber = id;
 	}
 	
-	//static Map<String, String> Accounts = new HashMap<>();
 /*
 	public void signIn() {
 		System.out.println("Enter your username: ");
@@ -23,12 +23,22 @@ public class BankAccount extends BankingApp{
 		Scanner scanner1 = new Scanner(System.in);
 		String password = scanner1.next();
 		
-		if (Accounts.containsKey(username) && Accounts.containsValue(password)) {
-			menu();
-		}
-		else {
+		try{
+			File Accounts = new File(".txt");
+			Scanner reader = new Scanner(Accounts);
+			while(reader.hasNextLine()){
+				String credentials = reader.nextLine();
+				String [] credArr = credentials.split(",");
+				if(credArr[0] == username && credArr[1] == password){
+					welcome();
+				}
+			}
 			System.out.println("Invalid username or password. Try again.");
 			signIn();
+		}
+		catch(FileNotFoundException e){
+			System.out.println("An error occurred.");
+      			e.printStackTrace();
 		}
 		
 	}
@@ -38,19 +48,55 @@ public class BankAccount extends BankingApp{
 		System.out.println("Enter your name: ");
 		Scanner scanner = new Scanner(System.in);
 		String name = scanner.next();
+		
 		//enter username
-		System.out.println("Enter a username: ");
-		Scanner scanner2 = new Scanner(System.in);
-		String username = scanner2.next();
+		while(true){
+			System.out.println("Enter a username: ");
+			Scanner scanner2 = new Scanner(System.in);
+			String username = scanner2.next();
+			if(isValidUsername(username)){
+				//add to file;
+				break;
+			}
+			else{
+				System.out.println("Username already exists");
+			}
+		}
+		
 		//enter password
-		System.out.println("Enter a password: ");
-		Scanner scanner3 = new Scanner(System.in);
-		String password = scanner3.next();
+		while(true){
+			System.out.println("Enter a password (Must contain 8-20 characters,
+			at least one lowercase letter, at least one uppercase letter, 
+			at least one numeric character, and at least one special character[@#$%]): ");
+			Scanner scanner3 = new Scanner(System.in);
+			String password = scanner3.next();
+			if(isValidPassword(password)){
+				//add to file;
+				break;
+			}
+			else{
+				System.out.println("Invalid Password");
+			}
+		}
+		signIn();
+		
 		
 		
 	}
 	
 */	
+	static boolean isValidUsername(String username){
+		if(file.contains(username)) return false;
+		return true;
+	}
+	
+	static boolean isValidPassword(String password){
+		String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20}$";
+		Pattern pattern = Pattern.compile(regex);
+        	Matcher matcher = pattern.matcher(password);
+        	return matcher.matches();
+	}
+	
 	static void welcome() {
 		System.out.println("\n");
 		System.out.println("Welcome: " + accountName);
