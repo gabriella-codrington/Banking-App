@@ -9,6 +9,7 @@ public class BankAccount extends BankingApp{
 	//String username;
 	//String password;
 	
+	BankAccount(){}
 	BankAccount(String name, String id) {
 		accountName = name;
 		accountNumber = id;
